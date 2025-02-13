@@ -1,6 +1,6 @@
 import { ethers } from "hardhat";
 
-const CONTRACT_ADDRESS = "0x94c3A18e443D428C327C103c1b9CBf409eA64E9f";
+const CONTRACT_ADDRESS = "0xa329C808C5BF255ce023e48b9FD31189Ba568dc0";
 
 // Helper functions
 async function getCrowdFundContract() {
