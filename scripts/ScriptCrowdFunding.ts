@@ -13,20 +13,20 @@ const block = await ethers.provider.getBlock("latest");
 return block.timestamp;
 }
 
-async function waitForTransaction(tx, description) {
+async function waitForTransaction() {
 console.log(`${description} - Transaction sent, waiting for confirmation...`);
 const receipt = await tx.wait();
 console.log(`${description} - Transaction confirmed! Hash:`, receipt.hash);
 return receipt;
 }
 
-async function createEvent() {
-console.log("\n=== Creating Event ===");
-const _event = await CrowdFundContract();
+async function createcrowdFunding() {
+console.log("\n=== Creating crowdFunding ===");
+const _crowdFunding = await CrowdFundContract();
 const latestTime = await getCurrentTime();
-console.log("Creating event with parameters:", {
+console.log("Creating crowdFunding with parameters:", {
 });
-const tx = await _event.createCrowdFunding(
+const tx = await _crowdFunding.createCrowdFunding(
 latestTime + 30,
 latestTime + 86400,
 ethers.parseUnits("0.00000001", 18),
@@ -34,62 +34,62 @@ ethers.parseUnits("0.00000001", 18),
 20
 );
 const receipt = await waitForTransaction(tx, "Create CrowdFunding");
-const crowdFunding = await _event.event_count();
+const crowdFunding = await _crowdFunding.crowdFunding_count();
 console.log("Total CrowdFunding count:", crowdFunding.toString());
-const _eventInstance = await _event.events(2);
-console.log("Event instance details:", _eventInstance);
+const _crowdFundingInstance = await _crowdFunding.crowdFundings(2);
+console.log("crowdFunding instance details:", _crowdFundingInstance);
 return receipt.hash;
 }
-async function registerEvent() {
-console.log("\n=== Registering for Event ===");
-const _event = await getCrowdFundContract();
+async function registercrowdFunding() {
+console.log("\n=== Registering for crowdFunding ===");
+const _crowdFunding = await getCrowdFundContract();
 const owner = await ethers.provider.getSigner();
 console.log("Signer address:", await owner.getAddress());
 
-const receipt = await waitForTransaction(tx, "Register Event");
-const _hasRegistered = await _event.getHasRegistered(1, await owner.getAddress());
+const receipt = await waitForTransaction(tx, "Register crowdFunding");
+const _hasRegistered = await _crowdFunding.getHasRegistered(1, await owner.getAddress());
 console.log("Registration status:", _hasRegistered);
 return receipt.hash;
 }
 async function verifyTicket() {
 console.log("\n=== Verifying Ticket ===");
-const _event = await getEventContract();
+const _crowdFunding = await getcrowdFundingContract();
 const owner = await ethers.provider.getSigner();
 console.log("Signer address:", await owner.getAddress());
-const tx = await _event.verifyAttendance(1, 1);
+const tx = await _crowdFunding.verifyAttendance(1, 1);
 const receipt = await waitForTransaction(tx, "Verify Ticket");
-const isVerified = await _event.isVerifiedTicket(1, 1);
+const isVerified = await _crowdFunding.isVerifiedTicket(1, 1);
 console.log("Ticket verification status:", isVerified);
 return receipt.hash;
 }
-async function withdrawEvent() {
+async function withdrawcrowdFunding() {
 
-console.log("\n=== Withdrawing Event Funds ===");
-const _event = await getEventContract();
-let _balance = await _event.eventBalance(1);
-console.log("Initial event balance:", ethers.formatEther(_balance), "ETH");
-const tx = await _event.withdrawForEvent(1);
-const receipt = await waitForTransaction(tx, "Withdraw Event");
-_balance = await _event.eventBalance(1);
-console.log("Final event balance:", ethers.formatEther(_balance), "ETH");
+console.log("\n=== Withdrawing crowdFunding Funds ===");
+const _crowdFunding = await getcrowdFundingContract();
+let _balance = await _crowdFunding.crowdFundingBalance(1);
+console.log("Initial crowdFunding balance:", ethers.formatEther(_balance), "ETH");
+const tx = await _crowdFunding.withdrawForcrowdFunding(1);
+const receipt = await waitForTransaction(tx, "Withdraw crowdFunding");
+_balance = await _crowdFunding.crowdFundingBalance(1);
+console.log("Final crowdFunding balance:", ethers.formatEther(_balance), "ETH");
 return receipt.hash;
 }
 // Main function to execute all operations in sequence
 async function main() {
 try {
-console.log("Starting event management sequence...");
-const createHash = await createEvent();
+console.log("Starting crowdFunding management sequence...");
+const createHash = await createcrowdFunding();
 
-console.log("Create Event Transaction Hash:", createHash);
+console.log("Create crowdFunding Transaction Hash:", createHash);
 await new Promise(resolve => setTimeout(resolve, 5000));
-const registerHash = await registerEvent();
-console.log("Register Event Transaction Hash:", registerHash);
+const registerHash = await registercrowdFunding();
+console.log("Register crowdFunding Transaction Hash:", registerHash);
 await new Promise(resolve => setTimeout(resolve, 5000));
 const verifyHash = await verifyTicket();
 console.log("Verify Ticket Transaction Hash:", verifyHash);
 await new Promise(resolve => setTimeout(resolve, 5000));
-const withdrawHash = await withdrawEvent();
-console.log("Withdraw Event Transaction Hash:", withdrawHash);
+const withdrawHash = await withdrawcrowdFunding();
+console.log("Withdraw crowdFunding Transaction Hash:", withdrawHash);
 console.log("All operations completed successfully!");
 } catch (error) {
 console.error("Error in execution:", error);
